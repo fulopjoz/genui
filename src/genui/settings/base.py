@@ -57,7 +57,8 @@ MIDDLEWARE = [
     # 'django.middleware.csrf.CsrfViewMiddleware', FIXME: this should be handled once we approach more serious production level
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',\
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'genui.urls'
@@ -85,7 +86,24 @@ WSGI_APPLICATION = 'genui.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 # inheriting config should define this
-DATABASES = None
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'OPTIONS': {
+            'options': '-c search_path=schemaname,public'  # from https://github.com/rdkit/django-rdkit/issues/18#issuecomment-742437224
+        },
+        'NAME': 'genui',
+        'USER': 'genui',
+        'PASSWORD': 'genui',
+        'HOST': 'localhost',  # Use the Docker container's IP if necessary
+        'PORT': '5432',
+        'TEST': {
+            'NAME': 'genui_test',
+        }
+    }
+}
+
+
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField' # later this should be changed to django.db.models.BigAutoField https://dev.to/weplayinternet/upgrading-to-django-3-2-and-fixing-defaultautofield-warnings-518n
 
 
