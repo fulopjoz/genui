@@ -1,6 +1,5 @@
 name: genui
 channels:
-  - defaults
   - conda-forge
 dependencies:
   - _libgcc_mutex=0.1
@@ -9,16 +8,16 @@ dependencies:
   - certifi=2024.2.2
   - ld_impl_linux-64=2.40
   - libffi=3.4.2
-  - libgcc-ng=13.2.0
-  - libgomp=13.2.0
-  - libstdcxx-ng=13.2.0
+  - libgcc-ng=14.1.0
+  - libgomp=14.1.0
+  - libstdcxx-ng=14.1.0
   - ncurses=6.5
   - openssl=3.3.1
   - pip=24.0
-  - python=3.12.3
+  - python=3.12.4
   - readline=8.2
-  - setuptools=70.0.0
-  - sqlite=3.45.3
+  - setuptools=70.1.1
+  - sqlite=3.46.0
   - tk=8.6.13
   - tzdata=2024a
   - wheel=0.43.0
