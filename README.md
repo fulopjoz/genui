@@ -26,4 +26,4 @@ if you would like to contribute.
 
 # License
 
-This software is distributed under [MIT license](./src/LICENSE.md)
+This software is distributed under [MIT license](./LICENSE.md)

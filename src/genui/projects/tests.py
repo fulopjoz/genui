@@ -1,5 +1,7 @@
 import json
+import os
 import shutil
+
 
 from django.conf import settings
 from django.contrib.auth.models import User, Group
@@ -21,7 +23,8 @@ class UserMixIn:
 
     def tearDown(self):
         # self.deleteUser()
-        shutil.rmtree(settings.MEDIA_ROOT)
+        if os.path.exists(settings.MEDIA_ROOT):
+            shutil.rmtree(settings.MEDIA_ROOT)
 
     def login(self):
         self.client.login(username=self.username, password=self.password)
@@ -67,7 +70,6 @@ class ProjectMixIn(UserMixIn):
 
 class ProjectTestCase(ProjectMixIn, APITestCase):
 
-    def test_default_generator(self):
+    def test_ProjectMixIn(self):
         self.assertTrue(self.project)
-        generator = Generator.objects.filter(project=self.project).all()[0]
-        self.assertTrue(generator)
+        

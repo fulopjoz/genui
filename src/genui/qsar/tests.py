@@ -173,8 +173,8 @@ class ModelInitTestCase(QSARModelInit, APITestCase):
 
     def test_create_view_from_file_classification(self):
         instance_first = self.createTestQSARModel()
-        self.assertEquals(instance_first.predictionsType, ActivityTypes.objects.get(value="Active Probability"))
-        self.assertEquals(instance_first.predictionsUnits, None)
+        self.assertEqual(instance_first.predictionsType, ActivityTypes.objects.get(value="Active Probability"))
+        self.assertEqual(instance_first.predictionsUnits, None)
         instance = self.uploadModel(
             instance_first.modelFile.path,
             instance_first.trainingStrategy.algorithm,
@@ -191,8 +191,8 @@ class ModelInitTestCase(QSARModelInit, APITestCase):
 
         activity_set = self.predictWithModel(instance, self.molset)
         for activity in activity_set.activities.all():
-            self.assertEquals(activity.type, instance_first.predictionsType)
-            self.assertEquals(activity.units, instance_first.predictionsUnits)
+            self.assertEqual(activity.type, instance_first.predictionsType)
+            self.assertEqual(activity.units, instance_first.predictionsUnits)
 
     def test_create_view_regression(self):
         model = self.createTestQSARModel(
@@ -200,8 +200,8 @@ class ModelInitTestCase(QSARModelInit, APITestCase):
             metrics=ModelPerformanceMetric.objects.filter(name__in=("R2", "MSE")),
             activityType=ActivityTypes.objects.get(value="Ki")
         )
-        self.assertEquals(model.predictionsType, ActivityTypes.objects.get(value="Ki"))
-        self.assertEquals(model.predictionsUnits, ActivityUnits.objects.get(value="nM"))
+        self.assertEqual(model.predictionsType, ActivityTypes.objects.get(value="Ki"))
+        self.assertEqual(model.predictionsUnits, ActivityUnits.objects.get(value="nM"))
         self.assertTrue(isinstance(joblib.load(model.modelFile.path), RandomForestRegressor))
         activity_set_orig = self.predictWithModel(model, self.molset)
 
@@ -219,8 +219,8 @@ class ModelInitTestCase(QSARModelInit, APITestCase):
         print(builder.predict())
         activity_set = self.predictWithModel(model_from_file, self.molset)
         for activity_uploaded, activity_orig in zip(activity_set.activities.all(), activity_set_orig.activities.all()):
-            self.assertEquals(activity_uploaded.type, model.predictionsType)
-            self.assertEquals(activity_uploaded.units, model.predictionsUnits)
-            self.assertEquals(activity_uploaded.type, activity_orig.type)
-            self.assertEquals(activity_uploaded.units, activity_orig.units)
-            self.assertEquals(activity_uploaded.value, activity_orig.value)
+            self.assertEqual(activity_uploaded.type, model.predictionsType)
+            self.assertEqual(activity_uploaded.units, model.predictionsUnits)
+            self.assertEqual(activity_uploaded.type, activity_orig.type)
+            self.assertEqual(activity_uploaded.units, activity_orig.units)
+            self.assertEqual(activity_uploaded.value, activity_orig.value)

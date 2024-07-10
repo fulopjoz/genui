@@ -19,7 +19,7 @@ class ChEMBLMolSetTestCase(CompoundsMixIn, APITestCase):
                 "maxPerTarget" : 10
             }
         )
-        self.assertEquals(self.molset.__class__, models.ChEMBLCompounds)
+        self.assertEqual(self.molset.__class__, models.ChEMBLCompounds)
         mol = self.molset.molecules.all()[0]
         image_path = mol.mainPic.image.path
         self.assertTrue(os.path.exists(image_path))

@@ -7,36 +7,37 @@ On: 5/7/20, 2:25 PM
 
 __all__ = [
     "__version__",
-    "__devstatus__",
-    "__devversion__",
     "get_release_info"
 ]
 
 # https://setuptools.readthedocs.io/en/latest/setuptools.html#specifying-your-project-s-version
 __version__ = "0.0.0"
-__devstatus__ = "alpha" # prerelease tag
-__devversion__ = "3" # prerelease version
 
-# make sure that the version specification is correct
-assert (__devstatus__ and __devversion__) or not (__devstatus__ or __devversion__)
+import os
+
+if os.path.exists(os.path.join(os.path.dirname(__file__), "_version.py")):
+    from ._version import version
+    __version__ = version
+
 
 def get_release_info():
     """
-    Generate an easy to use dictionary with release information.
+    Generate an easy-to-use dictionary with release information.
 
     Returns
     -------
     dict
         a dictionary with release information
     """
+    version_split = __version__.split('+')
+    version_main = ".".join(version_split[0].split('.')[0:3])
 
-    version = __version__
-    if __devstatus__ and __devversion__:
-        version += f".{__devstatus__}{__devversion__}"
 
+    devstatus = version_split[0].split(".")[-1] if len(version_split) > 1 else None
+    devversion = version_split[1].split(".")[-1] if len(version_split) > 1 else None
     return {
-        'version' : __version__,
-        'version_full' : version,
-        'dev_status' : __devstatus__,
-        'dev_version' : __devversion__
+        'version': version_main,
+        'version_full': __version__,
+        'dev_status': devstatus,
+        'dev_version': devversion
     }

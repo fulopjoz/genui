@@ -1,0 +1,65 @@
+name: Lightweight Test
+
+on:
+  push:
+    branches:
+      - '**' # all branches, but:
+      - '!dev/master'
+      - '!master'
+      - '!gh-pages'
+
+env:
+  DJANGO_SETTINGS_MODULE: 'genui.settings.test'
+
+jobs:
+  tests-all:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+
+    services:
+      postgres:
+        image: informaticsmatters/rdkit-cartridge-debian:latest
+        env:
+          POSTGRES_USER: genui
+          POSTGRES_PASSWORD: genui
+          POSTGRES_DB: genui
+        ports:
+          - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Cache Python Environment
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.pythonLocation }}
+          key: ${{ runner.os }}-${{ env.pythonLocation }}-${{ hashFiles('**/pyproject.toml') }}
+
+      - name: Install Environment
+        run: |
+          pip install .[dev]
+
+      - name: Check Environment Info
+        run: |
+          python -m pip freeze
+          python -c "print('Python version: ' + '$(python --version)')"
+          python -c "import platform; print('System info: ', platform.system(), platform.release())"
+          python -c "import genui; print('GenUI version:', genui.__version__)"
+
+      - name: Run migrations
+        run: cd src && python manage.py migrate
+
+      - name: Run tests
+        run: py.test -xv src/
