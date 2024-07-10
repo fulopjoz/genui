@@ -48,7 +48,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Set Up Dependencies
+      - name: Install Environment
         run: |
           python -m pip cache purge
           pip install .[dev]
