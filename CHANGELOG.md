@@ -1,13 +1,14 @@
 # Change Log
 
-Previous version: `0.0.0.alpha2`
+Previous version: `0.0.0.alpha3`
 
-Current version: `0.0.0.alpha3`
+Current version: `0.0.0.alpha4`
 
 ## Changes
 
-- update to DrugEx v3.1.0
+- updated all dependencies to the latest versions
+- added GitHub Actions for CI/CD
 
 ## Fixes
 
-- fixed a few small bugs
+None.

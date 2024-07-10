@@ -33,8 +33,8 @@ def get_release_info():
     version_main = ".".join(version_split[0].split('.')[0:3])
 
 
-    devstatus = version_split[1].split(".")[0] if len(version_split) > 1 else None
-    devversion = version_split[1].split(".")[1] if len(version_split) > 1 else None
+    devstatus = version_split[0].split(".")[-1] if len(version_split) > 1 else None
+    devversion = version_split[1].split(".")[-1] if len(version_split) > 1 else None
     return {
         'version': version_main,
         'version_full': __version__,
