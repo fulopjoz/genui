@@ -67,7 +67,7 @@ class QSARModelInitSerializer(QSARModelSerializer):
         read_only_fields = QSARModelSerializer.Meta.read_only_fields
 
     def is_valid(self, raise_exception=True):
-        ret = super().is_valid(raise_exception)
+        ret = super().is_valid(raise_exception=raise_exception)
         data = self.validated_data
         tr_strat_data = data['trainingStrategy']
 
