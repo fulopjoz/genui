@@ -17,7 +17,19 @@ HTML_DIR="$BASE_DIR/build/html/"
 TEMP_REPO_DIR="/tmp/docs/$USER/GenUI/"
 rm -rf "$TEMP_REPO_DIR"
 mkdir -p -m 0755 "$TEMP_REPO_DIR"
-git clone --single-branch --branch gh-pages "$REMOTE_URL" "$TEMP_REPO_DIR"
+# check if branch gh-pages exists, if not create it as an empty orphan branch
+if [[ $(git ls-remote --heads $REMOTE_URL gh-pages) ]]; then
+    echo "Branch gh-pages exists on remote $REMOTE_NAME. Cloning..."
+    git clone --single-branch --branch gh-pages "$REMOTE_URL" "$TEMP_REPO_DIR"
+else
+    echo "Branch gh-pages does not exist on remote $REMOTE_NAME. Creating..."
+    git clone --branch master "$REMOTE_URL" "$TEMP_REPO_DIR"
+    cd "$TEMP_REPO_DIR"
+    git checkout --orphan gh-pages
+    git rm -rf .
+    git commit --allow-empty -m "Initial commit on gh-pages branch"
+    git push $REMOTE_NAME gh-pages
+fi
 
 # Update the web page directories
 cd "$TEMP_REPO_DIR"
